@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "SAC_pm_275_EB",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "OBJECTID": 288080, "Route": 275, "RteSuffix": "", "RouteS": "275", "PMRouteID": "SAC275...R", "County": "SAC", "District": 3, "PMPrefix": "", "PM": 0.068, "PMSuffix": "", "PMc": "0.068", "Odometer": 0.47799999, "PMInterval": 0.001, "HwySegment": "End County", "AlignCode": "Right", "RouteType": "State", "Direction": "EB", "PMoffset": 0.068 }, "geometry": { "type": "Point", "coordinates": [ -121.507221176999963, 38.580239740000025 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 288081, "Route": 275, "RteSuffix": "", "RouteS": "275", "PMRouteID": "SAC275...R", "County": "SAC", "District": 3, "PMPrefix": "", "PM": 0.0, "PMSuffix": "", "PMc": "0.0", "Odometer": 0.41, "PMInterval": 10.0, "HwySegment": "Begin County", "AlignCode": "Right", "RouteType": "State", "Direction": "EB", "PMoffset": 0.001 }, "geometry": { "type": "Point", "coordinates": [ -121.508255368999983, 38.580529869000031 ] } }
+]
+}

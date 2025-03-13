@@ -1,0 +1,12 @@
+{
+"type": "FeatureCollection",
+"name": "HUM_route_283_NB",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "OBJECTID": 286305, "Route": 283, "RteSuffix": "", "RouteS": "283", "PMRouteID": "HUM283...R", "County": "HUM", "District": 1, "PMPrefix": "", "PM": 0.35600001, "PMSuffix": "", "PMc": "0.356", "Odometer": 0.35600001, "PMInterval": 0.001, "HwySegment": "End County", "AlignCode": "Right", "RouteType": "State", "Direction": "NB", "PMoffset": 0.356 }, "geometry": { "type": "Point", "coordinates": [ -124.101106110999979, 40.49263916600006 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 286306, "Route": 283, "RteSuffix": "", "RouteS": "283", "PMRouteID": "HUM283...R", "County": "HUM", "District": 1, "PMPrefix": "", "PM": 0.30000000999999998, "PMSuffix": "", "PMc": "0.3", "Odometer": 0.30000000999999998, "PMInterval": 0.1, "HwySegment": "Mid Segment", "AlignCode": "Right", "RouteType": "State", "Direction": "NB", "PMoffset": 0.3 }, "geometry": { "type": "Point", "coordinates": [ -124.100745489999952, 40.491953416000058 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 286308, "Route": 283, "RteSuffix": "", "RouteS": "283", "PMRouteID": "HUM283...R", "County": "HUM", "District": 1, "PMPrefix": "", "PM": 0.2, "PMSuffix": "", "PMc": "0.2", "Odometer": 0.2, "PMInterval": 0.1, "HwySegment": "Mid Segment", "AlignCode": "Right", "RouteType": "State", "Direction": "NB", "PMoffset": 0.2 }, "geometry": { "type": "Point", "coordinates": [ -124.099987363999958, 40.490765646000057 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 286309, "Route": 283, "RteSuffix": "", "RouteS": "283", "PMRouteID": "HUM283...R", "County": "HUM", "District": 1, "PMPrefix": "", "PM": 0.1, "PMSuffix": "", "PMc": "0.1", "Odometer": 0.1, "PMInterval": 0.1, "HwySegment": "Mid Segment", "AlignCode": "Right", "RouteType": "State", "Direction": "NB", "PMoffset": 0.1 }, "geometry": { "type": "Point", "coordinates": [ -124.09915222099994, 40.489473940000039 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 286310, "Route": 283, "RteSuffix": "", "RouteS": "283", "PMRouteID": "HUM283...R", "County": "HUM", "District": 1, "PMPrefix": "", "PM": 0.0, "PMSuffix": "", "PMc": "0.0", "Odometer": 0.0, "PMInterval": 10.0, "HwySegment": "Begin County", "AlignCode": "Right", "RouteType": "State", "Direction": "NB", "PMoffset": 0.001 }, "geometry": { "type": "Point", "coordinates": [ -124.098368223999955, 40.488304483000036 ] } }
+]
+}

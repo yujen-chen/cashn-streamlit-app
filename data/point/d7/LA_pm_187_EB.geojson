@@ -1,0 +1,12 @@
+{
+"type": "FeatureCollection",
+"name": "LA_pm_187_EB",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "OBJECTID": 260776, "Route": 187, "RteSuffix": "", "RouteS": "187", "PMRouteID": "LA.187...R", "County": "LA", "District": 7, "PMPrefix": "", "PM": 8.89999962, "PMSuffix": "", "PMc": "8.9", "Odometer": 0.20900001, "PMInterval": 0.1, "HwySegment": "Mid Segment", "AlignCode": "Right", "RouteType": "State", "Direction": "EB", "PMoffset": 8.9 }, "geometry": { "type": "Point", "coordinates": [ -118.374015656999973, 34.037356025000065 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 260777, "Route": 187, "RteSuffix": "", "RouteS": "187", "PMRouteID": "LA.187...R", "County": "LA", "District": 7, "PMPrefix": "", "PM": 8.69099998, "PMSuffix": "", "PMc": "8.691", "Odometer": 0.0, "PMInterval": 0.001, "HwySegment": "Begin County", "AlignCode": "Right", "RouteType": "State", "Direction": "EB", "PMoffset": 8.692 }, "geometry": { "type": "Point", "coordinates": [ -118.377095750999956, 34.035606962000031 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 260952, "Route": 187, "RteSuffix": "", "RouteS": "187", "PMRouteID": "LA.187...R", "County": "LA", "District": 7, "PMPrefix": "", "PM": 8.90499973, "PMSuffix": "", "PMc": "8.905", "Odometer": 0.214, "PMInterval": 0.001, "HwySegment": "End County", "AlignCode": "Right", "RouteType": "State", "Direction": "EB", "PMoffset": 8.905 }, "geometry": { "type": "Point", "coordinates": [ -118.373920178999981, 34.037409480000065 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 261922, "Route": 187, "RteSuffix": "", "RouteS": "187", "PMRouteID": "LA.187...R", "County": "LA", "District": 7, "PMPrefix": "", "PM": 8.69999981, "PMSuffix": "", "PMc": "8.7", "Odometer": 0.009, "PMInterval": 0.1, "HwySegment": "Mid Segment", "AlignCode": "Right", "RouteType": "State", "Direction": "EB", "PMoffset": 8.7 }, "geometry": { "type": "Point", "coordinates": [ -118.376981218999958, 34.035672630000079 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 262138, "Route": 187, "RteSuffix": "", "RouteS": "187", "PMRouteID": "LA.187...R", "County": "LA", "District": 7, "PMPrefix": "", "PM": 8.80000019, "PMSuffix": "", "PMc": "8.8", "Odometer": 0.109, "PMInterval": 0.1, "HwySegment": "Mid Segment", "AlignCode": "Right", "RouteType": "State", "Direction": "EB", "PMoffset": 8.8 }, "geometry": { "type": "Point", "coordinates": [ -118.37548850099995, 34.036528498000052 ] } }
+]
+}
