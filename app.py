@@ -4,14 +4,16 @@ from pathlib import Path
 import folium
 from streamlit_folium import st_folium
 from src.PostmileSegmentExtractor import PostmileSegmentExtractor
-from src.MapPlotter import MapPlotter
+from src.MapPlotter import plotting_map
 
-# 設定頁面配置
+output_path = "data"
+
+# Page Config
 st.set_page_config(
     page_title="California State Highway Extractor", page_icon="🛣️", layout="wide"
 )
 
-# 設定標題
+# Title
 st.title("California State Highway Extractor 🛣️")
 st.markdown("---")
 
@@ -23,20 +25,16 @@ def get_available_data():
     data_path = Path("data")
     line_path = data_path / "line"
 
-    # 建立層級關係的字典
     hierarchy = {}  # district -> county -> route -> direction
 
-    # 檢查目錄是否存在
     if not line_path.exists():
         st.error(f"Directory not found: {line_path}")
         return {}, [], [], [], []
 
-    # 遍歷 line 目錄下的所有檔案
     for district_dir in line_path.glob("d*"):
         district = district_dir.name.replace("d", "")
         hierarchy[district] = {}
 
-        # 檢查是否有 geojson 檔案
         for file in district_dir.glob("*.geojson"):
             try:
                 filename = file.stem
@@ -47,7 +45,6 @@ def get_available_data():
                         route = parts[2]
                         direction = parts[3]
 
-                        # 檢查對應的 point 檔案是否存在
                         point_file = (
                             data_path
                             / "point"
@@ -56,7 +53,7 @@ def get_available_data():
                         )
 
                         if file.exists() and point_file.exists():
-                            # 建立層級關係
+
                             if county not in hierarchy[district]:
                                 hierarchy[district][county] = {}
                             if route not in hierarchy[district][county]:
@@ -68,12 +65,10 @@ def get_available_data():
                 st.warning(f"Error processing file {file.name}: {str(e)}")
                 continue
 
-    # 如果沒有找到任何有效的組合，提供預設值
     if not hierarchy:
         st.warning("No valid data files found. Using default values.")
-        return {}, ["1"], ["DN"], ["101"], ["NB"]
+        return {}, ["12"], ["ORA"], ["5"], ["NB"]
 
-    # 獲取所有可用的選項（用於初始化）
     districts = sorted(hierarchy.keys())
 
     return hierarchy, districts, [], [], []
@@ -83,18 +78,17 @@ def get_available_data():
 with st.sidebar:
     st.header("Select Route")
 
-    # 獲取可用的資料選項和層級關係
     hierarchy, districts, _, _, _ = get_available_data()
 
-    # District 選擇
+    # District
     districts = sorted(districts, key=lambda x: int(x))
     district = st.selectbox("District", options=districts, help="Select District")
 
-    # County 選擇（基於選擇的 District）
+    # County
     counties = sorted(hierarchy.get(district, {}).keys()) if district else []
     county = st.selectbox("County", options=counties, help="Select County")
 
-    # Route 選擇（基於選擇的 County）
+    # Route
 
     routes = (
         sorted(hierarchy.get(district, {}).get(county, {}).keys()) if county else []
@@ -102,7 +96,7 @@ with st.sidebar:
     routes = sorted(routes, key=lambda x: int(x))
     route = st.selectbox("Route", options=routes, help="Select Route")
 
-    # Direction 選擇（基於選擇的 Route）
+    # Direction
     directions = (
         sorted(hierarchy.get(district, {}).get(county, {}).get(route, []))
         if route
@@ -110,16 +104,60 @@ with st.sidebar:
     )
     direction = st.selectbox("Direction", options=directions, help="Select Direction")
 
-    # 顯示選擇的組合是否有效
+    # verify the selection
     if district and county and route and direction:
         if direction in hierarchy.get(district, {}).get(county, {}).get(route, []):
             st.success("Valid combination selected!")
         else:
             st.error("Invalid combination selected!")
 
-# 主要內容區域
+    st.header("Select Segments")
+    try:
+        temp_extractor = PostmileSegmentExtractor(
+            district=district,
+            county=county,
+            route=route,
+            direction=direction,
+            dataPath="data",
+        )
+
+        min_pm = temp_extractor.SHNPointGdf["PM"].min()
+        max_pm = temp_extractor.SHNPointGdf["PM"].max()
+
+        col1, col2 = st.sidebar.columns(2)
+
+        with col1:
+            start_pm = st.number_input(
+                "Start pm",
+                min_value=float(min_pm),
+                max_value=float(max_pm),
+                value=float(min_pm),
+                step=0.1,
+                format="%.1f",
+                help="Select the start pm",
+            )
+        with col2:
+            end_pm = st.number_input(
+                "End pm",
+                min_value=float(min_pm),
+                max_value=float(max_pm),
+                value=float(max_pm),
+                step=0.1,
+                format="%.1f",
+                help="Select the end pm",
+            )
+        if start_pm > end_pm:
+            st.sidebar.warning("Start pm cannot be greater than end pm")
+            start_pm_pm, end_pm = end_pm, start_pm
+
+    except Exception as e:
+        st.sidebar.info("Please choose pm")
+        start_pm, end_pm = 0, 0
+
+
+# Main Area
 try:
-    # 建立提取器實例
+
     with st.spinner("Loading..."):
         extractor = PostmileSegmentExtractor(
             district=district,
@@ -129,7 +167,6 @@ try:
             dataPath="data",
         )
 
-        # 顯示資料基本資訊
         col1, col2 = st.columns(2)
 
         with col1:
@@ -146,34 +183,75 @@ try:
             st.write(f"- Start PM: {min_pm:.1f}")
             st.write(f"- End PM: {max_pm:.1f}")
 
-    st.subheader("Route Map")
-
-    # plot the map
-    map_plotter = MapPlotter(
-        lineGeoJSONPath=extractor.lineFilePath, pointGeoJSONPath=extractor.pointFilePath
+    st.subheader("Extract Route")
+    # Extract the segment based on selected start_pm and end_pm
+    splitted_result_gdf, splitted_point_gdf = extractor.cut_line_by_points(
+        start_pm=start_pm, end_pm=end_pm
     )
-    try:
-        m = map_plotter.plotting_map(
-            lineGdf=map_plotter.lineGdf, pointGdf=map_plotter.pointGdf
+    col3, col4 = st.columns(2)
+    with col3:
+        st.subheader("Split Line Segment Data")
+        st.dataframe(splitted_result_gdf.drop(columns=["geometry"]), hide_index=True)
+
+        def save_and_get_line_data():
+            line_filename = f"splitted_d{district}_{county}_{route}_{direction}_{start_pm:.1f}_{end_pm:.1f}.geojson"
+            splitted_line_path = Path(output_path) / "splitted" / line_filename
+            splitted_line_path.parent.mkdir(parents=True, exist_ok=True)
+            splitted_result_gdf.to_file(splitted_line_path, driver="GeoJSON")
+            with open(splitted_line_path, "rb") as f:
+                return f.read()
+
+        st.download_button(
+            label="Download Splitted Line (GeoJSON)",
+            data=save_and_get_line_data(),
+            file_name=f"splitted_d{district}_{county}_{route}_{direction}_{start_pm:.1f}_{end_pm:.1f}.geojson",
+            mime="application/json",
+            help="Download Splitted Line in GeoJSON Format",
         )
 
-        # 在 Streamlit 中顯示地圖
+    with col4:
+        st.subheader("Split Point Data")
+        st.dataframe(
+            splitted_point_gdf[["PM", "County", "Route", "Direction"]], hide_index=True
+        )
+
+        def save_and_get_point_data():
+            point_filename = f"splitted_pm_d{district}_{county}_{route}_{direction}_{start_pm:.1f}_{end_pm:.1f}.geojson"
+            splitted_point_path = Path(output_path) / "splitted" / point_filename
+            splitted_point_path.parent.mkdir(parents=True, exist_ok=True)
+            splitted_point_gdf.to_file(splitted_point_path, driver="GeoJSON")
+            with open(splitted_point_path, "rb") as f:
+                return f.read()
+
+        st.download_button(
+            label="Download Splitted Point (GeoJSON)",
+            data=save_and_get_point_data(),
+            file_name=f"splitted_pm_d{district}_{county}_{route}_{direction}_{start_pm:.1f}_{end_pm:.1f}.geojson",
+            mime="application/json",
+            help="Download Splitted Point in GeoJSON Format",
+        )
+
+    st.subheader("Route Map")
+
+    try:
+        m = plotting_map(lineGdf=splitted_result_gdf, pointGdf=splitted_point_gdf)
+
+        # Streamlit map
         st_folium(m, width=960, height=720)
 
-        # 添加資料表格顯示選項
         if st.checkbox("Show Data Table"):
             tab1, tab2 = st.tabs(["Line Data", "Point Data"])
 
             with tab1:
                 st.subheader("Line Data")
                 st.dataframe(
-                    map_plotter.lineGdf.drop(columns=["geometry"]), hide_index=True
+                    splitted_result_gdf.drop(columns=["geometry"]), hide_index=True
                 )
 
             with tab2:
                 st.subheader("Point Data")
                 st.dataframe(
-                    map_plotter.pointGdf[["PM", "County", "Route", "Direction"]],
+                    splitted_point_gdf[["PM", "County", "Route", "Direction"]],
                     hide_index=True,
                 )
 
@@ -181,5 +259,4 @@ try:
         st.error(f"Error plotting map: {str(e)}")
 
 except Exception as e:
-    st.error(f"載入資料時發生錯誤：{str(e)}")
-    st.info("請確認選擇的參數是否正確")
+    st.error(f"Error loading data：{str(e)}")

@@ -18,3 +18,9 @@ venv/
 # System
 .DS_Store
 Thumbs.db
+
+# data related
+# Ignore all files in data/splitted directory
+data/splitted/*
+# But keep the directory itself
+!data/splitted/.gitkeep

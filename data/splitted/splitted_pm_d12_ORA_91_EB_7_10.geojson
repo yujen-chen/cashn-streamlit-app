@@ -1,9 +1,0 @@
-{
-"type": "FeatureCollection",
-"name": "splitted_pm_d12_ORA_91_EB_7_10",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "OBJECTID": 160918, "Route": 91, "RteSuffix": "", "RouteS": "91", "PMRouteID": "ORA091...R", "County": "ORA", "District": 12, "PMPrefix": "", "PM": 7.0, "PMSuffix": "", "PMc": "7.0", "Odometer": 25.37299919, "PMInterval": 1.0, "HwySegment": "Mid Segment", "AlignCode": "Right", "RouteType": "State", "Direction": "EB", "PMoffset": 7.0 }, "geometry": { "type": "Point", "coordinates": [ -117.861470514999951, 33.846425578000037 ] } },
-{ "type": "Feature", "properties": { "OBJECTID": 160897, "Route": 91, "RteSuffix": "", "RouteS": "91", "PMRouteID": "ORA091.R.R", "County": "ORA", "District": 12, "PMPrefix": "R", "PM": 10.0, "PMSuffix": "", "PMc": "R10.0", "Odometer": 28.37299919, "PMInterval": 10.0, "HwySegment": "Mid Segment", "AlignCode": "Right", "RouteType": "State", "Direction": "EB", "PMoffset": 10.0 }, "geometry": { "type": "Point", "coordinates": [ -117.81540593699998, 33.84983787200008 ] } }
-]
-}

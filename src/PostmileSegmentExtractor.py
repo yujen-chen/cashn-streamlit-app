@@ -157,26 +157,8 @@ class PostmileSegmentExtractor:
 
             splitted_point_gdf = splitted_point_gdf = points_gdf.iloc[[0, -1]].copy()
 
-            # TODO: add export to geojson in splitted folder
-            district = splitted_point_gdf["District"].iloc[0]
-            county = splitted_point_gdf["County"].iloc[0]
-            route = splitted_point_gdf["Route"].iloc[0]
-            direction = splitted_point_gdf["Direction"].iloc[0]
-            splitted_output_path = (
-                Path(output_path)
-                / "splitted"
-                / f"splitted_d{district}_{county}_{route}_{direction}_{start_pm}_{end_pm}.geojson"
-            )
-            splitted_point_output_path = (
-                Path(output_path)
-                / "splitted"
-                / f"splitted_pm_d{district}_{county}_{route}_{direction}_{start_pm}_{end_pm}.geojson"
-            )
-            splitted_result_gdf.to_file(splitted_output_path, driver="GeoJSON")
-            splitted_point_gdf.to_file(splitted_point_output_path, driver="GeoJSON")
-
             return splitted_result_gdf, splitted_point_gdf
 
         except Exception as e:
-            print(f"處理線段時發生錯誤: {str(e)}")
+            print(f"Error: {str(e)}")
             return None
