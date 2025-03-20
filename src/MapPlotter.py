@@ -45,7 +45,7 @@ class MapPlotter:
 
             m.add_gdf(
                 self.lineGdf,
-                layer_name="Original Line",
+                layer_name="Entire Highway/StateRoute",
                 style=line_style,
                 hover_style=hover_style,
             )
@@ -55,6 +55,7 @@ class MapPlotter:
                 layer_name="Points",
                 style=point_style,
                 hover_style=hover_style,
+                show=False
             )
 
             m.add_layer_control()

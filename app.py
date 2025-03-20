@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # 設定標題
-st.title("California State Highway Extractor")
+st.title("California State Highway Extractor 🛣️")
 st.markdown("---")
 
 
@@ -79,7 +79,7 @@ def get_available_data():
     return hierarchy, districts, [], [], []
 
 
-# 側邊欄：資料選擇
+# side bar
 with st.sidebar:
     st.header("Select Route")
 
@@ -87,6 +87,7 @@ with st.sidebar:
     hierarchy, districts, _, _, _ = get_available_data()
 
     # District 選擇
+    districts = sorted(districts, key=lambda x: int(x))
     district = st.selectbox("District", options=districts, help="Select District")
 
     # County 選擇（基於選擇的 District）
@@ -94,9 +95,11 @@ with st.sidebar:
     county = st.selectbox("County", options=counties, help="Select County")
 
     # Route 選擇（基於選擇的 County）
+
     routes = (
         sorted(hierarchy.get(district, {}).get(county, {}).keys()) if county else []
     )
+    routes = sorted(routes, key=lambda x: int(x))
     route = st.selectbox("Route", options=routes, help="Select Route")
 
     # Direction 選擇（基於選擇的 Route）
@@ -143,7 +146,6 @@ try:
             st.write(f"- Start PM: {min_pm:.1f}")
             st.write(f"- End PM: {max_pm:.1f}")
 
-    # 顯示地圖
     st.subheader("Route Map")
 
     # plot the map
@@ -156,7 +158,7 @@ try:
         )
 
         # 在 Streamlit 中顯示地圖
-        st_folium(m, width=800, height=600)
+        st_folium(m, width=960, height=720)
 
         # 添加資料表格顯示選項
         if st.checkbox("Show Data Table"):
@@ -177,46 +179,6 @@ try:
 
     except Exception as e:
         st.error(f"Error plotting map: {str(e)}")
-
-    # # 建立地圖
-    # center_point = [
-    #     extractor.SHNLineGdf.geometry.iloc[0].centroid.y,
-    #     extractor.SHNLineGdf.geometry.iloc[0].centroid.x,
-    # ]
-
-    # m = folium.Map(location=center_point, zoom_start=11, tiles="cartodbpositron")
-
-    # # 添加路線圖層
-    # folium.GeoJson(
-    #     extractor.SHNLineGdf,
-    #     name="路線",
-    #     style_function=lambda x: {"color": "#3388ff", "weight": 3, "opacity": 0.8},
-    # ).add_to(m)
-
-    # # 添加里程碑點位圖層
-    # for _, point in extractor.SHNPointGdf.iterrows():
-    #     folium.CircleMarker(
-    #         location=[point.geometry.y, point.geometry.x],
-    #         radius=5,
-    #         color="red",
-    #         fill=True,
-    #         popup=f"PM: {point['PM']:.1f}",
-    #         tooltip=f"里程碑: {point['PM']:.1f}",
-    #     ).add_to(m)
-
-    # # 添加圖層控制
-    # folium.LayerControl().add_to(m)
-
-    # # 在 Streamlit 中顯示地圖
-    # st_folium(m, width=800, height=600)
-
-    # # 顯示原始資料表格（可選）
-    # if st.checkbox("顯示詳細資料"):
-    #     st.subheader("里程碑點位資料")
-    #     st.dataframe(
-    #         extractor.SHNPointGdf[["PM", "County", "Route", "Direction"]],
-    #         hide_index=True,
-    #     )
 
 except Exception as e:
     st.error(f"載入資料時發生錯誤：{str(e)}")
