@@ -1,10 +1,8 @@
 import streamlit as st
-import geopandas as gpd
 from pathlib import Path
-import folium
-from streamlit_folium import st_folium
 from src.PostmileSegmentExtractor import PostmileSegmentExtractor
 from src.MapPlotter import plotting_map
+
 
 output_path = "data"
 
@@ -20,7 +18,7 @@ st.markdown("---")
 
 def get_available_data():
     """
-    從資料目錄中獲取可用的資料選項，並建立層級關係
+    Obtain available data options from the data directory and establish hierarchical relationships.
     """
     data_path = Path("data")
     line_path = data_path / "line"
@@ -80,29 +78,39 @@ with st.sidebar:
 
     hierarchy, districts, _, _, _ = get_available_data()
 
-    # District
     districts = sorted(districts, key=lambda x: int(x))
-    district = st.selectbox("District", options=districts, help="Select District")
-
-    # County
-    counties = sorted(hierarchy.get(district, {}).keys()) if district else []
-    county = st.selectbox("County", options=counties, help="Select County")
-
-    # Route
-
-    routes = (
-        sorted(hierarchy.get(district, {}).get(county, {}).keys()) if county else []
+    default_district = districts[0] if districts else ""
+    district = st.selectbox(
+        "District", options=districts, index=0, help="Select District"
     )
-    routes = sorted(routes, key=lambda x: int(x))
-    route = st.selectbox("Route", options=routes, help="Select Route")
 
-    # Direction
-    directions = (
-        sorted(hierarchy.get(district, {}).get(county, {}).get(route, []))
-        if route
-        else []
+    counties = sorted(hierarchy.get(district or default_district, {}).keys())
+    default_county = counties[0] if counties else ""
+    county = st.selectbox(
+        "County",
+        options=counties,
+        index=0 if counties else None,
+        help="Select County",
     )
-    direction = st.selectbox("Direction", options=directions, help="Select Direction")
+
+    routes = sorted(hierarchy.get(district, {}).get(county or default_county, {}).keys())
+    routes = sorted(routes, key=lambda x: int(x)) if routes else []
+    route = st.selectbox(
+        "Route",
+        options=routes,
+        index=0 if routes else None,
+        help="Select Route",
+    )
+
+    directions = sorted(
+        hierarchy.get(district, {}).get(county, {}).get(route, []) if route else []
+    )
+    direction = st.selectbox(
+        "Direction",
+        options=directions,
+        index=0 if directions else None,
+        help="Select Direction",
+    )
 
     # verify the selection
     if district and county and route and direction:
@@ -148,7 +156,7 @@ with st.sidebar:
             )
         if start_pm > end_pm:
             st.sidebar.warning("Start pm cannot be greater than end pm")
-            start_pm_pm, end_pm = end_pm, start_pm
+            start_pm, end_pm = end_pm, start_pm
 
     except Exception as e:
         st.sidebar.info("Please choose pm")
@@ -234,10 +242,9 @@ try:
     st.subheader("Route Map")
 
     try:
-        m = plotting_map(lineGdf=splitted_result_gdf, pointGdf=splitted_point_gdf)
+        map_fig = plotting_map(lineGdf=splitted_result_gdf, pointGdf=splitted_point_gdf)
 
-        # Streamlit map
-        st_folium(m, width=960, height=720)
+        st.plotly_chart(map_fig, use_container_width=False, config={"scrollZoom": True})
 
         if st.checkbox("Show Data Table"):
             tab1, tab2 = st.tabs(["Line Data", "Point Data"])
@@ -259,4 +266,4 @@ try:
         st.error(f"Error plotting map: {str(e)}")
 
 except Exception as e:
-    st.error(f"Error loading data：{str(e)}")
+    st.error(f"Error loading data: {str(e)}")

@@ -7,6 +7,9 @@ env/
 .env
 venv/
 .venv/
+*.egg-info/
+build/
+dist/
 
 # IDE
 .vscode/
@@ -24,3 +27,7 @@ Thumbs.db
 data/splitted/*
 # But keep the directory itself
 !data/splitted/.gitkeep
+
+# coding agents
+AGENTS.md
+CLAUDE.md

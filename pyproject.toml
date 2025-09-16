@@ -1,0 +1,19 @@
+[project]
+name = "cashn-streamlit-app"
+version = "0.1.0"
+description = "Streamlit app for exploring California highway segments"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "numpy>=1.23.2,<2.0.0",
+    "streamlit>=1.24.0",
+    "geopandas>=0.13.2",
+    "shapely>=2.0.1",
+    "pandas>=2.0.0",
+    "matplotlib>=3.10.0",
+    "plotly>=5.20.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
