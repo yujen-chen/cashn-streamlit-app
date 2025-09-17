@@ -108,7 +108,7 @@ def plotting_map(
         fig.update_layout(
             mapbox=mapbox_config,
             margin=dict(l=0, r=0, t=0, b=0),
-            width=960,
+            width=1400,
             height=720,
             legend=dict(orientation="h", y=0.01, yanchor="bottom", x=0.99, xanchor="right"),
         )

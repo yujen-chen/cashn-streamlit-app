@@ -31,3 +31,6 @@ data/splitted/*
 # coding agents
 AGENTS.md
 CLAUDE.md
+
+# test notebooks
+notebooks/
